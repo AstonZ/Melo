@@ -1,29 +1,31 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text
-} from 'react-native';
+import { ScrollView } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 
 class Me extends Component {
-
-    render(){
-        return (
-            <View style={styles.container}>
-                <Text>
-                    Me Info
-                </Text>
-            </View>
-        );
-    }
+  render() {
+    return (
+      <ScrollView>
+        <List>
+          <ListItem
+            title="Notifications"
+          />
+          <ListItem
+            title="Profile"
+          />
+          <ListItem
+            title="Password"
+          />
+        </List>
+        <List>
+          <ListItem
+            title="Sign Out"
+            rightIcon={{ name: 'cancel' }}
+          />
+        </List>
+      </ScrollView>
+    );
+  }
 }
-
-const styles = StyleSheet.create({
-
-    container: {
-        flex: 1
-    }
-
-});
 
 export default Me;
