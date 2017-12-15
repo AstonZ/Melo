@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    TextInput
 } from 'react-native'
 
 import TextField from '../components/Input/TextField'
@@ -16,35 +18,66 @@ class Register extends Component {
             errorMobile: ''
         }
     }
-    // ref='tf_mobile'
-    // style={styles.formStyle}
-    // header={'Mobile'} 
-    // error={errorMobile}
-    // onTextChange={this.onMobileTextChange}
+    static propTypes = {
+        mobile: PropTypes.string
+    }
+
     render(){
-        const {mobile, errorMobile} = this.state;        
+        const {mobile, errorMobile} = this.state;   
+        
+        // static propTypes = {
+        //     style: ViewPropTypes.style,
+        //     textStyle: Text.propTypes.style,
+        //     onClick: PropTypes.func,
+        //     disableColor: PropTypes.string,
+        //     timerTitle: PropTypes.string,
+        //     enable: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+        //     onTimerEnd: PropTypes.func,
+        //     timerActiveTitle: PropTypes.array,
+        //     timerCount: PropTypes.number
+        // }
+
         return (
             <View style={styles.container}>
-                <TextField style={styles.mobile}
-                header='Mobile'
-                error={errorMobile}>
-                </TextField>
-                <TextField>
-                </TextField>
-                <CountDownButton/>
+                <TextInput style={styles.mobile}
+                value={"2312312"}
+                onChangeText= {(text)=>this.setState({mobile: text})}                
+                />
+                <CountDownButton
+                style={styles.cdButton}
+                textStyle = {{color: 'orange', fontSize: 16}}
+                /** ShouldStartCounting 变量哪里来的 */
+                onClick={(shouldStartCounting)=>{
+                    this._requestAPI(shouldStartCounting);
+                }}
+                disabableColor={'red'}
+                timerTitle={'Left: '}
+                enable={true}
+                onTimerEnd = { ()=> {
+                    console.log('Now timer is end !')
+                }}
+                timerActiveTitle={ ['Active Left ', 's'] }
+                timerCount={20}
+                />
             </View>
         );
+    }
+
+    _requestAPI = (shouldStartCounting)=>{
+
     }
 }
 
 const styles = StyleSheet.create({
 
     container: {
-        flex: 1
+        flex: 1,
+        alignItems: 'center'
     },
 
     mobile:{
-
+        top:100,
+        width: 200
     },
 
     captcha: {

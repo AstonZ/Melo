@@ -106,8 +106,6 @@ export default class Login extends Component {
     }
 
     onGoRegister = () => {
-        const text = this.refs.mobileInput.textInputRef().getText();
-        console.log("start navigation to register  " + text)
         this.props.navigation.navigate('RegisterPage');
     }
 }
