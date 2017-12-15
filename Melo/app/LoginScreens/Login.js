@@ -7,50 +7,109 @@ import {
 import { 
     Button,
  } from 'react-native-elements';
-import TextField from '../../components/Input/TextField';
 
-class Login extends Component {
+import TextField from '../components/Input/TextField';
+
+export default class Login extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            nameEror:null
+            mobile:'',
+            password:'',
+            errorMobile: '',
+            errorPassword: ''
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log('receive new props = '+ nextProps);
+        console.log('Store = ', this.props.store);
+    }
+
     render(){
+        const { onSubmit } = this.props;
+        const { errorMobile, errorPassword } = this.state;
         return (
             <View style={styles.container}>
-                {/* <FormLabel>EmailAdress or Phone Number</FormLabel> */}
-                {/* <FormInput style={styles.formStyle}
-                 onChangeText={this.onNameTextChanged}/>
-                <FormValidationMessage>{'Email or Cellphone Number is Required'}</FormValidationMessage> */}
-                <TextField ref='tf_name'
-                 style={styles.formStyle}
-                header={'name'} 
-                error={this.state.nameEror}
-                onTextChange={this.onNameTextChanged}
+                <TextField
+                ref='mobileInput'
+                style={styles.formStyle}
+                header={'Mobile'} 
+                error={errorMobile}
+                onTextChange={this.onMobileTextChange}
                 />
-                <Button raised
-                    icon={{name: 'home', size: 32}}
-                    buttonStyle={{backgroundColor: 'red', borderRadius: 10}}
+                <TextField
+                ref='tf_pw'
+                style={styles.formStyle}
+                header={'Password'} 
+                error={errorPassword}
+                onTextChange={this.onPasswordTextChange}
+                />
+                <Button small
+                    // icon={{name: 'home', size: 32}}
+                    buttonStyle={{backgroundColor: 'orange', borderRadius: 10}}
                     textStyle={{textAlign: 'center'}}
-                    title={`Welcome to\nReact Native Elements`}
-                    />
+                    title={'Login'}
+                    onPress={this._checkValidate}
+                />
+                <Button small
+                    // icon={{name: 'home', size: 32}}
+                    style = {{top: 30}}
+                    buttonStyle={{backgroundColor: 'grey', borderRadius: 5}}
+                    textStyle={{textAlign: 'center'}}
+                    title={'Register'}
+                    onPress={this.onGoRegister}
+                />
             </View>
         );
     }
 
-    onNameTextChanged = (text) => {
-        console.log('textChanged:' + text);
-        if (text.length>5){
-            this.setState({nameEror: "Too Long!"});
-        }else{
-            this.setState({nameEror: null});
+    onMobileTextChange = text => {
+        this.setState({
+            mobile: text
+        })
+    }
+
+    onPasswordTextChange = text => {
+        this.setState({password: text});
+    }
+
+    _checkValidate = ()=> {
+        const text = this.refs.mobileInput.getText();
+        console.log("start navigation to register  " + text)
+
+        const {mobile, password} = this.state;
+        console.log("mobile = ", mobile, "password = ", password);
+        var errorMobile = '';
+        var errorPassword = '';
+        if (mobile.length < 10){
+            errorMobile = "mobile format error !"
         }
-    };
+        if (password.length < 5){
+            errorPassword = "password is required !"
+        }
 
+        if (errorMobile.length>1 || errorPassword.length>1){
+            this.setState({
+                errorMobile,
+                errorPassword
+            })
+            return;
+        }else{
+            this.setState({
+                errorMobile:'',
+                errorPassword:''
+            })
+        }
+        this.onGoRegister();
+    }
 
+    onGoRegister = () => {
+        const text = this.refs.mobileInput.textInputRef().getText();
+        console.log("start navigation to register  " + text)
+        this.props.navigation.navigate('RegisterPage');
+    }
 }
 
 const styles = StyleSheet.create({
@@ -67,5 +126,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-export default Login;

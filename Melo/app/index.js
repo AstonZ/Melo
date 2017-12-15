@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
-import { RootTabs } from './config/router';
+// import { Provider } from 'react-redux';
+// import configStore from './store/configStore';
+import { LoginStack } from './config/router';
+
+// const store = configStore();
 
 export default class Melo extends Component {
     render(){
-        return <RootTabs/>
+        return (
+        // <Provider store={store}>
+            <LoginStack/>
+        // </Provider>
+        )
     }
 }
+
