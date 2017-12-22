@@ -18,8 +18,7 @@ export default class CountDownButton extends Component {
         this.state = {
             timerCount: this.props.timerCount || 60,//default 60s
             timerTitle: this.props.timerTitle || "Get Captcha",
-            counting: false,
-            selfEable: true //
+            counting: false
         }
     }
 
@@ -31,36 +30,11 @@ export default class CountDownButton extends Component {
         timerTitle: PropTypes.string,
         enable: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
         onTimerEnd: PropTypes.func,
-        timerActiveTitle: PropTypes.array,
+        timerActiveTitle: PropTypes.array,//if set, title = timerActiveTitle[0] + 10 + timerActiveTitle[1]
         timerCount: PropTypes.number
     }
 
 
-    render() {
-        const { onClick, style, textStyle, enable, disableColor } = this.props;
-        const { counting, timerTitle, selfEable } = this.state;
-        return (
-            <TouchableOpacity activeOpacity={counting? 1: 0.8 }
-            onPress={ ()=>{
-                if(!counting && enable && selfEable){
-                    //start counting
-                    this.setState({selfEable: false});
-                    //call back father component
-                    onClick(this._shouldStartCounting);
-                }
-            } }>
-                <View style={[styles.view, style]}>
-                    <Text style={[{fontSize: 16}, textStyle, {color:(
-                        (!counting && enable && selfEable) ?
-                        (textStyle? textStyle.color: 'blue'):
-                        disableColor || 'gray'
-                    )}]}>
-                        {timerTitle}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
 
     /** Start counting down */
     _countDownAction = () => {
@@ -78,9 +52,8 @@ export default class CountDownButton extends Component {
                 //reset state
                 this.setState({
                     timerCount: this.props.timerCount || 60,//default 60s
-                    timerTitle: this.props.timerTitle || "Get Captcha",
-                    counting: false,
-                    selfEable: true //
+                    timerTitle: this.props.timerTitle || "Captcha",
+                    counting: false
                 });
                 //on back on father
                 if(this.props.onTimerEnd){
@@ -89,7 +62,8 @@ export default class CountDownButton extends Component {
                 return;
             }
             //refresh UI per second
-            const timeLeft = timeEndStamp - nowStamp;
+            var timeLeft = timeEndStamp - nowStamp
+            timeLeft = parseInt(timeLeft/1000)
             //default tip
             let activeTitle = 'Reget at '+ timeLeft+ 's';
             //if user designed
@@ -111,29 +85,63 @@ export default class CountDownButton extends Component {
     /** interface should start counting */
     _shouldStartCounting = (shouldStart) => {
         if (this.state.counting) return;
-        
         // start counting
         if (shouldStart){
             this._countDownAction()
-            this.setState({counting: true, selfEable: false})
+            this.setState({counting: true})
             return
         }
-        // stop counting
-            this.setState({selfEable: true})
     }
 
     componentWillMount(){
         clearInterval(this.interval)
     }
 
+    render() {
+        const { onClick, style, textStyle, enable, disableColor } = this.props;
+        const { counting, timerTitle } = this.state;
+        return (
+            <TouchableOpacity style={[this.props.style, styles.viewStyle]}
+            activeOpacity={counting? 1: 0.8 }
+            onPress={ ()=>{
+                console.log('Press start in CDButton');
+                if(!counting && enable){
+                    //start counting
+                    //call back father component
+                    onClick(this._shouldStartCounting);
+                }
+            } }>
+                <View style={styles.textWrapper}>
+                    <Text style={[styles.textStyle, {color:(
+                        (!counting && enable) ?
+                        (textStyle? textStyle.color: 'orange'):
+                        disableColor || 'gray'
+                    )}]}>
+                        {timerTitle}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
 }
 
 const styles = StyleSheet.create({
 
-    view: {
-        width: 120,
-        height: 44,
+    viewStyle: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 4
+    },
+    textWrapper: {
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
+        },
+    textStyle: {
+        textAlign: 'center'
+        // backgroundColor: 'deepskyblue'
     }
 });

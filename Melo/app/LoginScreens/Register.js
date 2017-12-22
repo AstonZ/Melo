@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'react-native-elements'
 import {
     StyleSheet,
     View,
@@ -8,13 +9,12 @@ import {
 } from 'react-native'
 
 import TextField from '../components/Input/TextField'
-import CountDownButton from '../components/button/CountDownButton'
-
+import CaptchaField from './registComponents/CaptchaField'
 class Register extends Component {
     constructor(props){
         super(props)
         this.state = {
-            mobile: this.props.mobile || '',
+            mobile: this.props.mobile || 'Input Your Mobile',
             errorMobile: ''
         }
     }
@@ -40,13 +40,16 @@ class Register extends Component {
         return (
             <View style={styles.container}>
                 <TextInput style={styles.mobile}
-                value={"2312312"}
+                value={this.state.text}
+                placeholder={'Input Your Mobile'}
+                keyboardType={'numeric'}
+                maxLength={11}
                 onChangeText= {(text)=>this.setState({mobile: text})}                
                 />
-                <CountDownButton
+                {/* <CountDownButton
                 style={styles.cdButton}
                 textStyle = {{color: 'orange', fontSize: 16}}
-                /** ShouldStartCounting 变量哪里来的 */
+                //  ShouldStartCounting 变量哪里来的 
                 onClick={(shouldStartCounting)=>{
                     this._requestAPI(shouldStartCounting);
                 }}
@@ -58,7 +61,15 @@ class Register extends Component {
                 }}
                 timerActiveTitle={ ['Active Left ', 's'] }
                 timerCount={20}
-                />
+                /> */}
+                <CaptchaField style={styles.captchaStyle}/>
+                {/* <Button small
+                    style = {{marginTop: 30}}
+                    buttonStyle={{backgroundColor: 'grey', borderRadius: 5}}
+                    textStyle={{textAlign: 'center'}}
+                    title={'Register'}
+                    onPress={this.onGoRegister}
+                /> */}
             </View>
         );
     }
@@ -72,24 +83,32 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: 'center'
-    },
+        alignItems: 'center',//vertical
+        // justifyContent: 'center'
+        },
 
     mobile:{
-        top:100,
-        width: 200
+        // top: 80,
+        marginTop:60,
+        width: 320,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        alignSelf: 'center'
     },
 
-    captcha: {
-
+    captchaStyle: {
+        marginTop: 40,
+        width: 320,
+        height: 48
     },
 
-    cdButton: {
-        width: 50
-    },
 
-    cdText: {
-        color: 'orange'
+    regisButton: {
+        width: 100,
+        marginTop: 40,
+        height: 40,
+        borderRadius: 5
     }
 
 });
